@@ -94,6 +94,9 @@ public class WebControllerTest {
         mockMvc.perform(delete("/user")
                 .param("name", "DeleteName"))
                 .andExpect(status().isOk());
+        mockMvc.perform(get("/user/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size(*)").value(4));
     }
 
     @Test
@@ -134,6 +137,9 @@ public class WebControllerTest {
                 .param("name", "RenameOk")
                 .param("newName", "freeNameOk"))
                 .andExpect(status().isOk());
+        mockMvc.perform(get("/user/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[3].name").value("freeNameOk"));
     }
 
     @Test
@@ -166,5 +172,8 @@ public class WebControllerTest {
                 .param("name", "reScore")
                 .param("score", "55"))
                 .andExpect(status().isOk());
+        mockMvc.perform(get("/user/all"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[4].score").value(55));
     }
 }

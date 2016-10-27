@@ -41,12 +41,30 @@ public class WebController {
 
     @RequestMapping(value = "/user/name", method = RequestMethod.PATCH)
     public void renameUser(@RequestParam String name, @RequestParam String newName) {
-
+        if (name.isEmpty())
+            throw new BadRequestException();
+        if (newName.isEmpty())
+            throw new BadRequestException();
+        if (db.getUser(name) == null)
+            throw new NotFoundException();
+        if (db.getUser(newName) != null)
+            throw new ConflictException();
+        db.renameUser(name, newName);
     }
 
     @RequestMapping(value = "/user/score", method = RequestMethod.PATCH)
     public void reScoreUser(@RequestParam String name, @RequestParam String score) {
-
+        int scoreInt;
+        if (name.isEmpty())
+            throw new BadRequestException();
+        try {
+            scoreInt = Integer.parseInt(score);
+        } catch (NumberFormatException ex) {
+            throw new BadRequestException();
+        }
+        if (db.getUser(name) == null)
+            throw new NotFoundException();
+        db.reScoreUser(name, scoreInt);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

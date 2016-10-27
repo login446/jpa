@@ -36,4 +36,16 @@ public class DBComponent {
     public void deleteUser(String name) {
         repository.delete(getUser(name));
     }
+
+    public void renameUser(String name, String newName) {
+        User user = getUser(name);
+        user.setName(newName);
+        repository.save(user);
+    }
+
+    public void reScoreUser(String name, int score) {
+        User user = getUser(name);
+        user.setScore(score);
+        repository.save(user);
+    }
 }
